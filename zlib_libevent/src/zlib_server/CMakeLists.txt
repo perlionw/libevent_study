@@ -1,4 +1,6 @@
-project(first_libevent)
+project(zlib_server)
+
+add_definitions(-std=c++11)
 
 aux_source_directory(. DIR_SRCS)
 
@@ -8,5 +10,5 @@ target_link_libraries(${PROJECT_NAME} event)
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR})
 
-install(TARGETS ${PROJECT_NAME} DESTINATION ../bin)
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 

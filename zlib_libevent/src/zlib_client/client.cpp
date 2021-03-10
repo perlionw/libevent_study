@@ -1,6 +1,7 @@
 #include <event2/event.h>
 #include <event2/buffer.h>
 #include <event2/bufferevent.h>
+#include <string.h>
 #define SPORT 5001
 #include <iostream>
 using namespace std;
@@ -89,7 +90,7 @@ void client_event_cb(struct bufferevent *bev, short what, void *ctx)
 		//发送文件名
 		bufferevent_write(bev, FILEPATH, strlen(FILEPATH));
 
-		//创建输出过滤,延迟回调
+		//创建输出过滤,BEV_OPT_DEFER_CALLBACKS 延迟回调
 		bufferevent* bev_filter = bufferevent_filter_new(bev, 0, filter_out, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_DEFER_CALLBACKS, 0, 0);
 		FILE* fp = fopen(FILEPATH, "rb");
 		if (!fp)
@@ -116,6 +117,4 @@ void Client(event_base* base)
 	bufferevent_enable(bev, EV_READ | EV_WRITE);
 	
 	bufferevent_socket_connect(bev, (sockaddr*)&sin, sizeof(sin));
-
-
 }

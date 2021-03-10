@@ -5,6 +5,7 @@
 #include <event2/buffer.h>
 #include <string>
 #include <iostream>
+#include <string.h>
 using namespace std;
 #define SPORT 5001
 
@@ -44,7 +45,7 @@ void read_cb(struct bufferevent *bev, void *ctx)
 		bufferevent_read(bev, data, sizeof(data) - 1);
 		std::cout << data << std::endl;
 		
-		string out = "out\\";
+		string out = "out/";
 		out += data;
 		
 		//打开写入文件
