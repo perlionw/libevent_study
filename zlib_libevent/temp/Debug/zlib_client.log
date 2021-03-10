@@ -1,0 +1,6 @@
+﻿E:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(376,5): warning MSB8004: Intermediate 目录未以斜杠结尾。  此生成实例将添加斜杠，因为必须有这个斜杠才能正确计算 Intermediate 目录。
+E:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: Output 目录未以斜杠结尾。  此生成实例将添加斜杠，因为必须有这个斜杠才能正确计算 Output 目录。
+E:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: 中间目录(D:\vs2017_project\libevent_study\zlib_libevent\solution\..\temp\Debug\)包含从另一个项目(zlib_libevent.vcxproj)共享的文件。   这会导致错误的清除和重新生成行为。
+  client.cpp
+  zlib_client.vcxproj -> D:\vs2017_project\libevent_study\zlib_libevent\solution\..\temp\Debug\zlib_client.exe
+  已复制         1 个文件。

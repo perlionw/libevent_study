@@ -32,9 +32,11 @@ int main()
 	void Server(event_base* base);
 	Server(base);
 
+	//循环检测事件
 	if (base)
 		event_base_dispatch(base);
 
+	//释放上下文
 	if (base)
 		event_base_free(base);
 
