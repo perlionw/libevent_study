@@ -6,7 +6,13 @@
 #include <string>
 #include <iostream>
 #include <string.h>
-#include "zlib/zlib.h"
+
+#ifdef _WIN32
+#include <zlib/zlib.h>
+#else
+#include <zlib.h>
+#endif // _WIN32
+
 using namespace std;
 #define SPORT 5001
 

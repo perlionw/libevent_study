@@ -6,7 +6,7 @@ aux_source_directory(. DIR_SRCS)
 
 add_executable(${PROJECT_NAME} ${DIR_SRCS})
 
-target_link_libraries(${PROJECT_NAME} event)
+target_link_libraries(${PROJECT_NAME} event z)
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR})
 

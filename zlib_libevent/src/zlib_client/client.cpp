@@ -1,7 +1,11 @@
 #include <event2/event.h>
 #include <event2/buffer.h>
 #include <event2/bufferevent.h>
-#include "zlib/zlib.h"
+#ifdef _WIN32
+#include <zlib/zlib.h>
+#else
+#include <zlib.h>
+#endif // _WIN32
 #include <string.h>
 #define SPORT 5001
 #include <iostream>
