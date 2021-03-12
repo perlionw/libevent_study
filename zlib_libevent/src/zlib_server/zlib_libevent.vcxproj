@@ -85,7 +85,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)..\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libevent.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libevent.lib;ws2_32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy $(OutDir)$(ProjectName).exe $(SolutionDir)..\bin</Command>

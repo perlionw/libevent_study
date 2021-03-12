@@ -6,13 +6,25 @@
 #include <string>
 #include <iostream>
 #include <string.h>
+#include "zlib/zlib.h"
 using namespace std;
 #define SPORT 5001
 
 struct FileInfo
 {
-	int temp;
 	FILE* fp = nullptr;
+	z_stream* p = 0;
+	
+	~FileInfo()
+	{
+		if (fp)
+			fclose(fp);
+		fp = 0;
+		if (p)
+			inflateEnd(p);
+		delete p;
+		p = 0;
+	}	
 };
 
 static bufferevent_filter_result filter_in(
@@ -22,13 +34,70 @@ static bufferevent_filter_result filter_in(
 	enum bufferevent_flush_mode mode, 
 	void *ctx)
 {
+
+	FileInfo* info = (FileInfo*)ctx;
+
+	static bool get_file_name_flag = false;
 	std::cout << "filter_in" << std::endl;
 	//1、接受客户端发送的文件名
-	char data[1024] = { 0 };
-	int len = evbuffer_remove(src, data, sizeof(data) - 1); //读取并清空buffer
-	std::cout << len << std::endl;
-	//2、触发 读回调
-	evbuffer_add(dst, data, len);
+	if (!get_file_name_flag)
+	{
+		char data[1024] = { 0 };
+		int len = evbuffer_remove(src, data, sizeof(data) - 1); //读取并清空buffer
+		std::cout << len << std::endl;
+		//2、触发 读回调
+		evbuffer_add(dst, data, len);
+		get_file_name_flag = true;
+		return BEV_OK;
+	}
+
+	//解压
+	evbuffer_iovec v_in[1];
+	//读取数据 不清理缓冲
+	int n = evbuffer_peek(src, -1, NULL, v_in, 1);
+	if (n <= 0)
+		return BEV_NEED_MORE;
+
+	//解压上下文
+	z_stream* p = info->p;
+
+	//zlib 输入数据大小
+	p->avail_in = v_in[0].iov_len;
+	//zlib 输入数据地址
+	p->next_in = (Byte*)v_in[0].iov_base;
+
+	//申请输出空间大小
+	evbuffer_iovec v_out[1];
+	evbuffer_reserve_space(dst, 4096, v_out, 1);
+	
+	//输出数据大小
+	p->avail_out = v_out[0].iov_len;
+	//输出数据地址
+	p->next_out = (Byte*)v_out[0].iov_base;
+
+	int re = inflate(p, Z_SYNC_FLUSH);
+
+	if (re != Z_OK)
+	{
+		cerr << "inflate failed!!" << endl;
+	}
+
+	//解压用了多少数据，从source evbuffer中移除
+	//p->avail_in 未处理的数据大小
+	int nread = v_in[0].iov_len - p->avail_in;
+
+	//解压后数据大小 传入 des evbuffer
+	//p->avail_out 剩余空间大小
+	int nwrite = v_out[0].iov_len - p->avail_out;
+
+	//移除source evbuffer中数据
+	evbuffer_drain(src, nread);
+
+	
+	//传入 des evbuffer
+	v_out[0].iov_len = nwrite;
+	evbuffer_commit_space(dst, v_out, 1);
+
 	return BEV_OK;
 }
 
@@ -84,21 +153,11 @@ void event_cb(struct bufferevent *bev, short what, void *ctx)
 	if (what & BEV_EVENT_EOF)
 	{
 		cout << "server event BEV_EVENT_EOF" << endl;
-		if (info->fp)
-		{
-			fclose(info->fp);
-			info->fp = 0;
-		}
 		delete info;
 		bufferevent_free(bev);
 	}
 	else if (what & BEV_EVENT_ERROR)
 	{
-		if (info->fp)
-		{
-			fclose(info->fp);
-			info->fp = 0;
-		}
 		delete info;
 		cout << "server event BEV_EVENT_ERROR" << endl;
 		bufferevent_free(bev);
@@ -114,16 +173,21 @@ static void listen_cb(struct evconnlistener * e, evutil_socket_t s, struct socka
 	//1、 创建一个bufferevent用来通信
 	bufferevent* bev = bufferevent_socket_new(base, s, BEV_OPT_CLOSE_ON_FREE);
 
+
+	FileInfo* info = new FileInfo;
+
+	info->p = new z_stream();
+	inflateInit(info->p);
+
 	//2、 添加过滤器 并设置回调
 	bufferevent* bev_filter = bufferevent_filter_new(bev,
 		filter_in, //输入过滤函数
 		0,  //输出过滤函数
 		BEV_OPT_CLOSE_ON_FREE, //关闭filter 同时管理bufferevnet
 		0, //清理回调
-		nullptr
+		info
 	);
 
-	FileInfo* info = new FileInfo;
 
 	//3、 未过滤器设置回调 读取事件
 	bufferevent_setcb(bev_filter, read_cb, 0, event_cb, info);
