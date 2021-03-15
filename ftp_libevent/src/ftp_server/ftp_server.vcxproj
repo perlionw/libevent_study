@@ -20,12 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test_thread_pool.cpp" />
+    <ClCompile Include="XFtpFactory.cpp" />
     <ClCompile Include="XFtpServerCMD.cpp" />
+    <ClCompile Include="XFtpTask.cpp" />
+    <ClCompile Include="XFtpUSER.cpp" />
     <ClCompile Include="XThread.cpp" />
     <ClCompile Include="XThreadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="XFtpFactory.h" />
     <ClInclude Include="XFtpServerCMD.h" />
+    <ClInclude Include="XFtpTask.h" />
+    <ClInclude Include="XFtpUSER.h" />
     <ClInclude Include="XTask.h" />
     <ClInclude Include="XThread.h" />
     <ClInclude Include="XThreadPool.h" />

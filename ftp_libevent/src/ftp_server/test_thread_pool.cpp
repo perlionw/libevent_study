@@ -8,13 +8,13 @@
 #endif // _WIN32
 #include "XThreadPool.h"
 #include "XFtpServerCMD.h"
-
+#include "XFtpFactory.h"
 using namespace std;
 
 void listener_cb(struct evconnlistener *ev, evutil_socket_t fd, struct sockaddr * s, int socklen, void *arg)
 {
 	std::cout << "listener_cb" << std::endl;
-	XFtpServerCMD* task = new XFtpServerCMD();
+	XTask* task = XFtpFactory::Get()->CreateTask();
 	task->sock = fd;
 	XThreadPool::Get()->Dispatch(task);
 }

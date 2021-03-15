@@ -27,6 +27,15 @@
     <ClCompile Include="XThreadPool.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="XFtpTask.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="XFtpUSER.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="XFtpFactory.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="XThread.h">
@@ -39,6 +48,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="XThreadPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XFtpTask.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XFtpUSER.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XFtpFactory.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
