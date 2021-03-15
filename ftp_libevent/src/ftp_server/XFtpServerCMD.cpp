@@ -13,6 +13,7 @@ bool XFtpServerCMD::Init()
 	//监听socket bufferevent
 	// base socket
 	bufferevent* bev = bufferevent_socket_new(base, sock, BEV_OPT_CLOSE_ON_FREE);
+	this->bev = bev;
 	this->SetCallback(bev);
 
 	//添加超时
@@ -47,8 +48,22 @@ void XFtpServerCMD::Read(struct bufferevent* bev)
 		if (calls.find(type) != calls.end())
 		{
 			XFtpTask* t = calls[type];
-			t->cmdbev = bev;
+			t->cmdTask = this; //用来处理回复命令和目录
+			t->ip = ip;
+			t->port = port;
+			t->base = base;
 			t->Parse(type, data);
+			
+			if (type == "PORT")
+			{
+				ip = t->ip;
+				port = t->port;
+			}
+		}
+		else
+		{
+			string msg = "200 OK\r\n";
+			bufferevent_write(bev, msg.c_str(), msg.size());
 		}
 	}
 }
