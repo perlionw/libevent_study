@@ -23,7 +23,9 @@
     <ClCompile Include="XFtpFactory.cpp" />
     <ClCompile Include="XFtpLIST.cpp" />
     <ClCompile Include="XFtpPORT.cpp" />
+    <ClCompile Include="XFtpRETR.cpp" />
     <ClCompile Include="XFtpServerCMD.cpp" />
+    <ClCompile Include="XFtpSTOR.cpp" />
     <ClCompile Include="XFtpTask.cpp" />
     <ClCompile Include="XFtpUSER.cpp" />
     <ClCompile Include="XThread.cpp" />
@@ -33,7 +35,9 @@
     <ClInclude Include="XFtpFactory.h" />
     <ClInclude Include="XFtpLIST.h" />
     <ClInclude Include="XFtpPORT.h" />
+    <ClInclude Include="XFtpRETR.h" />
     <ClInclude Include="XFtpServerCMD.h" />
+    <ClInclude Include="XFtpSTOR.h" />
     <ClInclude Include="XFtpTask.h" />
     <ClInclude Include="XFtpUSER.h" />
     <ClInclude Include="XTask.h" />

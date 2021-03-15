@@ -3,6 +3,8 @@
 #include "XFtpUSER.h"
 #include "XFtpLIST.h"
 #include "XFtpPORT.h"
+#include "XFtpRETR.h"
+#include "XFtpSTOR.h"
 XTask* XFtpFactory::CreateTask()
 {
 	XFtpServerCMD* x = new XFtpServerCMD();
@@ -15,5 +17,8 @@ XTask* XFtpFactory::CreateTask()
 	x->Reg("CWD", list);
 	x->Reg("CDUP", list);
 	x->Reg("PORT", new XFtpPORT());
+	x->Reg("RETR", new XFtpRETR());
+	x->Reg("STOR", new XFtpSTOR());
+
 	return x;
 }

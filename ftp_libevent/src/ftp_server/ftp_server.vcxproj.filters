@@ -42,6 +42,12 @@
     <ClCompile Include="XFtpPORT.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="XFtpRETR.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="XFtpSTOR.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="XThread.h">
@@ -69,6 +75,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="XFtpPORT.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XFtpRETR.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XFtpSTOR.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
