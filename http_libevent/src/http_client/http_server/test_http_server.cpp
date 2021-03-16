@@ -28,8 +28,10 @@ void http_cb(struct evhttp_request *req, void *arg)
 	{
 	case EVHTTP_REQ_GET:
 		cmdtype = "GET";
+		break;
 	case EVHTTP_REQ_POST:
 		cmdtype = "POST";
+		break;
 	default:
 		break;
 	}
