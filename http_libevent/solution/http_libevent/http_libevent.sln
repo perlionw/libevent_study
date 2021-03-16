@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.1401
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "http_client", "..\..\src\http_client\http_client.vcxproj", "{E44869E6-66C3-41D9-BCFD-5A15750C4899}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "http_server", "..\..\src\http_client\http_server\http_server.vcxproj", "{32A14301-3CF4-4A1C-A071-FE1D850ABE4F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "http_server", "..\..\src\http_server\http_server.vcxproj", "{32A14301-3CF4-4A1C-A071-FE1D850ABE4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -139,6 +139,8 @@ int TestGetHttp()
 	if (evcon) evhttp_connection_free(evcon);
 	if (base)
 		event_base_free(base);
+
+	return 0;
 }
 
 int TestPostHttp()
@@ -226,6 +228,8 @@ int TestPostHttp()
 	if (evcon) evhttp_connection_free(evcon);
 	if (base)
 		event_base_free(base);
+
+	return 0;
 }
 
 int main()
