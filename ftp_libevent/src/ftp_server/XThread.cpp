@@ -2,6 +2,11 @@
 #include <thread>
 #include <iostream>
 #include "XTask.h"
+
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
 //激活线程任务的回调函数
 static void NotifyCB(evutil_socket_t fd, short which, void *arg)
 {
@@ -97,7 +102,7 @@ void XThread::Notify(evutil_socket_t fd, short which)
 #ifdef _WIN32
 	int re = recv(fd, buf, 1, 0);
 #else
-	int re = read(fd, nif, 1);
+	int re = read(fd, buf, 1);
 #endif
 
 	if (re <= 0)

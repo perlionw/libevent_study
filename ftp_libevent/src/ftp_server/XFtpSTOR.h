@@ -9,7 +9,7 @@ public:
 	virtual void Read(struct bufferevent *bev);
 	virtual void Event(struct bufferevent *bev, short what);
 private:
-	FILE *fp = 0;
+	FILE * fp = 0;
 	char buf[1024] = { 0 };
 };
 

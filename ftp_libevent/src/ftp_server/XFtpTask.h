@@ -19,6 +19,7 @@ public:
 	//用来发送建立了连接的数据通道
 	void Send(std::string data);
 	void Send(const char* data, int data_size);
+	virtual void Close();
 
 	//解析协议
 	virtual void Parse(std::string type, std::string data){ }
@@ -27,7 +28,6 @@ protected:
 	static void WriteCB(bufferevent* bev, void* arg);
 	static void EventCB(struct bufferevent* bev, short what, void* arg);
 
-	void Close();
 
 	//连接数据通道
 	void ConnectPort();
@@ -44,5 +44,8 @@ public:
 	//PORT 数据通道的IP和端口
 	std::string ip = "";
 	int port = 0;
+
+	FILE *fp = 0;
+
 };
 

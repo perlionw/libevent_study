@@ -39,8 +39,10 @@ void XFtpSTOR::Read(struct bufferevent *bev)
 	{
 		int len = bufferevent_read(bev, buf, sizeof(buf));
 		if (len <= 0)
+		{
 			return;
-
+		}
+			
 		int size = fwrite(buf, 1, len, fp);
 	}
 }
@@ -51,12 +53,14 @@ void XFtpSTOR::Event(struct bufferevent *bev, short what)
 	if (what & (BEV_EVENT_EOF | BEV_EVENT_ERROR | BEV_EVENT_TIMEOUT))
 	{
 		cout << "XFtpSTOR BEV_EVENT_EOF | BEV_EVENT_ERROR |BEV_EVENT_TIMEOUT" << endl;
-		Close();
+		//关闭文件句柄
 		if (fp)
 		{
 			fclose(fp);
 			fp = 0;
 		}
+		//此处不会关闭文件句柄
+		Close();
 		ResCMD("226 Transfer complete\r\n");
 	}
 	else if (what&BEV_EVENT_CONNECTED)

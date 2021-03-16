@@ -35,8 +35,6 @@ void XFtpRETR::Write(struct bufferevent *bev)
 	int len = fread(buf, 1, sizeof(buf), fp);
 	if (len <= 0)
 	{
-		fclose(fp);
-		fp = 0;
 		ResCMD("226 Transfer Complete\r\n");
 		Close();
 		return;
@@ -52,11 +50,6 @@ void XFtpRETR::Event(struct bufferevent *bev, short what)
 	{
 		cout << "BEV_EVENT_EOF | BEV_EVENT_ERROR |BEV_EVENT_TIMEOUT" << endl;
 		Close();
-		if (fp)
-		{
-			fclose(fp);
-			fp = 0;
-		}
 	}
 	else if (what&BEV_EVENT_CONNECTED)
 	{

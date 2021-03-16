@@ -2,6 +2,7 @@
 #include <event2/bufferevent.h>
 #include <event2/event.h>
 #include <event2/util.h>
+#include <string.h>
 void XFtpTask::SetCallback(struct bufferevent* bev)
 {
 	bufferevent_setcb(bev, ReadCB, WriteCB, EventCB, this);
@@ -49,6 +50,12 @@ void XFtpTask::Close()
 	{
 		bufferevent_free(bev);
 		bev = 0;
+	}
+
+	if (fp)
+	{
+		fclose(fp);
+		fp = 0;
 	}
 }
 

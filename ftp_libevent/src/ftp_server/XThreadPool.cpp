@@ -3,7 +3,11 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
-using namespace std::literals::chrono_literals;
+
+#ifdef _WIN32
+	using namespace std::literals::chrono_literals;
+#endif
+
 void XThreadPool::Init(int threadCount)
 {
 	this->threadCount = threadCount;
@@ -15,7 +19,8 @@ void XThreadPool::Init(int threadCount)
 		std::cout << "Create thread " << std::endl;
 		thread->Start();
 		threads.push_back(thread);
-		std::this_thread::sleep_for(10ms);
+		//std::this_thread::sleep_for(10ms);
+		std::this_thread::sleep_for(std::chrono::microseconds(10));
 	}
 }
 

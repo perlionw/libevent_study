@@ -19,5 +19,9 @@ public:
 private:
 	std::map<std::string, XFtpTask*> calls;
 
+	//用于资源清理
+	std::map<XFtpTask*, int> calls_del;
+
+
 };
 

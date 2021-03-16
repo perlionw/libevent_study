@@ -1,7 +1,11 @@
 #include "XFtpLIST.h"
 #include <event2/event.h>
 #include <event2/bufferevent.h>
+#ifdef _WIN32
 #include <io.h>
+#endif
+
+
 void XFtpLIST::Parse(std::string type, std::string msg)
 {
 	std::string resmsg = "";
@@ -105,6 +109,7 @@ std::string XFtpLIST::GetListData(std::string path)
 {
 	std::string data = "";
 
+#ifdef _WIN32
 	//存储文件信息
 	_finddata_t file;
 
@@ -114,12 +119,12 @@ std::string XFtpLIST::GetListData(std::string path)
 	if (dir < 0)
 		return data;
 
-	do 
+	do
 	{
 		std::string tmp = "";
 		if (file.attrib & _A_SUBDIR)
 		{
-			if(strcmp(file.name, ".") == 0 || strcmp(file.name, "..") == 0)
+			if (strcmp(file.name, ".") == 0 || strcmp(file.name, "..") == 0)
 				continue;
 			tmp = "drwxrwxrwx 1 root group ";
 		}
@@ -139,6 +144,23 @@ std::string XFtpLIST::GetListData(std::string path)
 		data += tmp;
 
 	} while (_findnext(dir, &file) == 0);
+#else
+	std::string cmd = "ls -l ";
+	cmd += path;
+	std::cout << "popen: " << cmd << std::endl;
+	FILE* f = popen(cmd.c_str(), "r");
+	if (!f)
+		return data;
+	char buffer[1024] = { 0 };
+	for (;;)
+	{
+		int len = fread(buffer, 1, sizeof(buffer) - 1, f);
+		if (len <= 0)break;
+		buffer[len] = '\0';
+		data += buffer;
+	}
+	pclose(f);
+#endif
 
 	return data;
 }

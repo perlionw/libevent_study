@@ -1,7 +1,7 @@
 
 #include "XFtpServerCMD.h"
 #include <event2/bufferevent.h>
-#include <event2./event.h>
+#include <event2/event.h>
 #include<iostream>
 #include <string>
 using namespace std;
@@ -79,7 +79,6 @@ void XFtpServerCMD::Event(struct bufferevent* bev, short what)
 	if (what & (BEV_EVENT_EOF | BEV_EVENT_ERROR | BEV_EVENT_TIMEOUT))
 	{
 		cout << "BEV_EVENT_EOF | BEV_EVENT_ERROR | BEV_EVENT_TIMEOUT" << endl;
-		bufferevent_free(bev);
 		delete this;
 	}
 }
@@ -106,6 +105,7 @@ void XFtpServerCMD::Reg(std::string cmd, XFtpTask* call)
 	}
 
 	calls[cmd] = call;
+	calls_del[call] = 0;
 }
 
 XFtpServerCMD::XFtpServerCMD()
@@ -115,4 +115,11 @@ XFtpServerCMD::XFtpServerCMD()
 
 XFtpServerCMD::~XFtpServerCMD()
 {
+	Close();
+	for (auto call : calls_del)
+	{
+		call.first->Close();
+		delete call.first;
+	}
+
 }
