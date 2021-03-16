@@ -24,9 +24,18 @@ void http_client_cb(struct evhttp_request *req, void *arg)
 		return;
 	}
 
-	//获取uri
+	//获取path
 	const char* path = evhttp_request_get_uri(req);
 	cout << "request path is " << path << endl;
+
+	std::string file_path = "./out";
+	file_path += path;
+	cout << "file_path: " << file_path << endl;
+	//如果路径中有目录，需要分析出目录，并创建
+	FILE* fp = fopen(file_path.c_str(), "wb");
+	if (!fp)
+		cout << "open file " << file_path << "failed!" << endl;
+
 
 	//获取返回的code 200 404
 	cout << "Response: " << evhttp_request_get_response_code(req) << " " <<
@@ -39,8 +48,11 @@ void http_client_cb(struct evhttp_request *req, void *arg)
 		int len = evbuffer_remove(inbuf, buf, sizeof(buf) - 1);
 		if (len <= 0) break;
 		buf[len] = 0;
-		cout << buf << flush;
+		fwrite(buf, 1, len, fp);
 	}
+
+	if (fp)
+		fclose(fp);
 }
 
 int main()
@@ -62,7 +74,8 @@ int main()
 	}
 
 	//生成请求消息 GET
-	std::string http_url = "http://ffmpeg.club/index.html?id=1";
+	//std::string http_url = "http://ffmpeg.club/index.html?id=1";
+	std::string http_url = "http://127.0.0.1:8080/index.html";
 
 	//分析url地址
 	//uri
@@ -127,6 +140,8 @@ int main()
 	//事件分发处理
 	if (base)
 		event_base_dispatch(base);
+	if (uri) evhttp_uri_free(uri);
+	if (evcon) evhttp_connection_free(evcon);
 	if (base)
 		event_base_free(base);
 
