@@ -34,6 +34,7 @@ void http_cb(struct evhttp_request *req, void *arg)
 		break;
 	}
 
+	std::cout << "cmdtype: " << cmdtype << endl;
 	//消息报头
 	evkeyvalq* headers = evhttp_request_get_input_headers(req);
 	cout << "===== headers ==== " << endl;
@@ -43,7 +44,7 @@ void http_cb(struct evhttp_request *req, void *arg)
 		cout << p->key << ":" << p->value << endl;
 	}
 
-	//请求正文
+	//请求正文（GET为空， POST有表单信息）
 	evbuffer* inbuf = evhttp_request_get_input_buffer(req);
 	char buf[1024] = { 0 };
 	cout << "====== input data =======" << endl;
@@ -70,6 +71,29 @@ void http_cb(struct evhttp_request *req, void *arg)
 		//默认加入首页文件
 		file_path += DEFAULTINDEX;
 	}
+
+	//消息报头
+	evkeyvalq* out_head = evhttp_request_get_output_headers(req);
+	//要支持 图片 js css 下载 zip 文件
+	// 获取文件的后缀
+	// ./root/index.html
+	int pos = file_path.rfind('.');
+	std::string postfix = file_path.substr(pos + 1, file_path.size() - (pos + 1));
+	if (postfix == "jpg" || postfix == "gif" || postfix == "png")
+	{
+		std::string tmp = "image/" + postfix;
+		evhttp_add_header(out_head, "Content-Type", tmp.c_str());
+	}
+	else if (postfix == "zip")
+	{
+		evhttp_add_header(out_head, "Content-Type", "application/zip");
+	}
+	else if (postfix == "html")
+	{
+		evhttp_add_header(out_head, "Content-Type", "text/html;charset=UTF8");
+	}
+	else if(postfix == "css")
+		evhttp_add_header(out_head, "Content-Type", "text/css");
 
 	//读取html文件返回正文
 	FILE* fp = fopen(file_path.c_str(), "rb");
